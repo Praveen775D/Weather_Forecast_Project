@@ -2,40 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather Forecast App</title>
+    <title>Weather Forecast App</title> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <link rel="stylesheet" href="./src/css/style.css">
 </head>
-<body class="bg-sky-100 min-h-screen">
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold text-center mb-4">🌤 Weather Forecast App</h1>
 
-        <div class="flex flex-col md:flex-row gap-2 justify-center mb-4">
-            <input id="cityInput" type="text" placeholder="Enter city name"
-                class="p-2 border rounded w-full md:w-64">
-            <button onclick="getWeatherByCity()"
-                class="bg-blue-500 text-white px-4 py-2 rounded">Search</button>
-            <button onclick="getWeatherByLocation()"
-                class="bg-green-500 text-white px-4 py-2 rounded">Use My Location</button>
-        </div>
+<body id="body"
+      class="min-h-screen bg-gradient-to-br from-blue-200 via-sky-200 to-indigo-300 flex items-center justify-center">
 
-        <div id="error" class="text-red-500 text-center"></div>
+<div class="bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-6 w-full max-w-6xl">
+    <!-- Main Weather Application UI -->
+    <h1 class="text-4xl font-bold text-center text-blue-700 mb-6">
+        🌦 Weather Forecast Application
+    </h1>
 
-        <div id="weatherResult" class="bg-white rounded shadow p-4 hidden">
-            <h2 id="locationName" class="text-xl font-semibold"></h2>
+    <!-- SEARCH SECTION -->
+    <div class="flex flex-col md:flex-row gap-3 justify-center mb-4">
+        <input id="cityInput"
+               class="p-3 rounded-xl border w-full md:w-80"
+               placeholder="Enter village / city name / pincode">
+
+        <button onclick="getWeatherByCity()"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl">
+            Search
+        </button>
+
+        <button onclick="getWeatherByLocation()"
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl">
+            Use My Location
+        </button>
+    </div>
+
+    <!-- MAP BUTTON -->
+    <div class="text-center mb-4">
+        <button onclick="toggleMap()"
+                class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl">
+            🌍 Map Weather
+        </button>
+    </div>
+
+    <!-- ERROR -->
+    <p id="error" class="text-center text-red-600 mb-3"></p>
+
+    <!-- MAP SECTION -->
+    <div id="mapSection" class="hidden mb-6">
+        <p class="text-center font-semibold mb-2">
+            Click anywhere on map to get weather
+        </p>
+        <div id="map" class="w-full h-96 rounded-2xl"></div>
+    </div>
+
+    <!-- WEATHER BOX -->
+    <div id="weatherBox" class="hidden bg-white rounded-2xl shadow-lg p-5 mb-6">
+        <h2 id="locationFull"
+            class="text-xl font-semibold text-center mb-3"></h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 text-center gap-4">
             <p id="temperature"></p>
             <p id="humidity"></p>
             <p id="wind"></p>
-            <button onclick="toggleTemp()" class="mt-2 bg-gray-200 px-2 py-1 rounded">
+        </div>
+
+        <div class="text-center mt-4">
+            <button onclick="toggleTemp()"
+                    class="bg-gray-200 px-4 py-2 rounded-xl">
                 Toggle °C / °F
             </button>
         </div>
-
-        <h3 class="text-xl font-bold mt-6">5-Day Forecast</h3>
-        <div id="forecast" class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4"></div>
     </div>
 
-    <script src="./js/app.js"></script>
+    <!-- FORECAST -->
+    <h3 class="text-2xl font-bold text-center mb-3">5-Day Forecast</h3>
+    <div id="forecast"
+         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4"></div>
+
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="./src/js/app.js"></script>
 </body>
 </html>
