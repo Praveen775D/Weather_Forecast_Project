@@ -1,4 +1,4 @@
-# Weather Forecast Application
+# Weather Forecast Application 
 
 ## Description
 A responsive Weather Forecast web application built using HTML, Tailwind CSS, and JavaScript.
