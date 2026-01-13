@@ -74,6 +74,7 @@ function onMapClick(e) {
     moveMap(lat, lng);
     fetchWeatherByCoordinates(lat, lng);
 }
+// Pincode-based search using OpenStreetMap Nominatim API
 
 // ---------- MAIN SEARCH (CITY / PINCODE) ----------
 function getWeatherByCity() {
