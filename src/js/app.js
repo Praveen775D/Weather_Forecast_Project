@@ -26,6 +26,7 @@ function toggleMap(force = false) {
         }
     }
 }
+// Leaflet map integration with multiple layers and click interaction
 
 // ---------- MAP INIT WITH LAYERS ----------
 function initMap() {
