@@ -1,4 +1,6 @@
-const API_KEY = "70ac342e5a05e0420fa5e454c744acef";
+// OpenWeatherMap API integration for current and forecast weather data
+
+const API_KEY = "70ac342e5a05e0420fa5e454c744acef"; 
 let map, marker;
 let mapInitialized = false;
 let currentTempC = 0;
@@ -82,7 +84,7 @@ function getWeatherByCity() {
         return;
     }
 
-    // ✅ PINCODE DETECTION (India – 6 digits)
+    // PINCODE DETECTION (India – 6 digits)
     if (/^\d{6}$/.test(input)) {
         fetchByPincode(input);
     } else {
@@ -177,13 +179,13 @@ function displayWeather(data) {
     isCelsius = true;
 
     document.getElementById("temperature").innerText =
-        `🌡 ${currentTempC} °C`;
+        `Temperature ${currentTempC} °C`;
 
     document.getElementById("humidity").innerText =
-        `💧 ${data.main.humidity}%`;
+        `Humidity ${data.main.humidity}%`;
 
     document.getElementById("wind").innerText =
-        `🌬 ${data.wind.speed} m/s`;
+        `Wind ${data.wind.speed} m/s`;
 
     if (currentTempC > 40) {
         showError("⚠ Extreme heat alert!");
@@ -215,9 +217,9 @@ function fetchForecast(lat, lon) {
                     card.className = "bg-white rounded-xl shadow p-3 text-center";
                     card.innerHTML = `
                         <p class="font-semibold">${day.dt_txt.split(" ")[0]}</p>
-                        <p>🌡 ${day.main.temp} °C</p>
-                        <p>💧 ${day.main.humidity}%</p>
-                        <p>🌬 ${day.wind.speed} m/s</p>
+                        <p>Temperature ${day.main.temp} °C</p>
+                        <p>Humidity ${day.main.humidity}%</p>
+                        <p>Wind ${day.wind.speed} m/s</p>
                     `;
                     forecast.appendChild(card);
                 });
