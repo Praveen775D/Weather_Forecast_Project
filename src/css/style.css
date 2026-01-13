@@ -1,30 +1,45 @@
-body {
-    transition: background 0.6s ease;
+/* ============ FORECAST COLOR THEMES ============ */
+
+/* Hot / Sunny */
+.forecast-hot {
+    background: linear-gradient(135deg, #f97316, #fb7185);
+    color: #fff;
 }
 
-#map {
-    border: 3px solid #6366f1;
+/* Warm / Clear */
+.forecast-warm {
+    background: linear-gradient(135deg, #facc15, #f97316);
+    color: #1f2937;
 }
-button {
-    background-color: #6366f1;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+/* Normal / Cloudy */
+.forecast-normal {
+    background: linear-gradient(135deg, #60a5fa, #818cf8);
+    color: #fff;
 }
-button:hover {
-    background-color: #4f46e5;
+
+/* Rainy */
+.forecast-rain {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #fff;
 }
-button:disabled {
-    background-color: #a5b4fc;
-    cursor: not-allowed;
+
+/* Cold */
+.forecast-cold {
+    background: linear-gradient(135deg, #67e8f9, #3b82f6);
+    color: #fff;
 }
-button:disabled:hover {
-    background-color: #a5b4fc;
+
+/* Hover effect */
+.forecast-card {
+    border-radius: 18px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-input[type="text"] {
-    border: 2px solid #6366f1;
-    padding: 8px;
-    transition: border-color 0.3s ease;
+
+.forecast-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 25px 45px rgba(0,0,0,0.35);
 }

@@ -1,45 +1,57 @@
-// OpenWeatherMap API integration for current and forecast weather data
+ 
+// Weather Forecast Application
+// API: OpenWeatherMap + OpenStreetMap (Nominatim)
+ 
 
-const API_KEY = "70ac342e5a05e0420fa5e454c744acef"; 
-let map, marker;
+const API_KEY = "70ac342e5a05e0420fa5e454c744acef";
+
+let map;
+let marker;
 let mapInitialized = false;
 let currentTempC = 0;
 let isCelsius = true;
-
-// ---------- ERROR ----------
-function showError(msg) {
-    document.getElementById("error").innerText = msg;
+ 
+// ERROR HANDLING
+ 
+function showError(message) {
+    document.getElementById("error").innerText = message;
 }
+
 function clearError() {
     document.getElementById("error").innerText = "";
 }
 
-// ---------- MAP TOGGLE ----------
-function toggleMap(force = false) {
-    const section = document.getElementById("mapSection");
+ 
+// MAP TOGGLE
+ 
 
-    if (force || section.classList.contains("hidden")) {
-        section.classList.remove("hidden");
+function toggleMap(force = false) {
+    const mapSection = document.getElementById("mapSection");
+
+    if (force || mapSection.classList.contains("hidden")) {
+        mapSection.classList.remove("hidden");
         if (!mapInitialized) {
             initMap();
             mapInitialized = true;
         }
     }
 }
-// Leaflet map integration with multiple layers and click interaction
 
-// ---------- MAP INIT WITH LAYERS ----------
+ 
+// MAP INITIALIZATION WITH MULTIPLE LAYERS
+ 
+
 function initMap() {
-    const street = L.tileLayer(
+    const streetLayer = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     );
 
-    const satellite = L.tileLayer(
+    const satelliteLayer = L.tileLayer(
         "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
         { subdomains: ["mt0", "mt1", "mt2", "mt3"] }
     );
 
-    const terrain = L.tileLayer(
+    const terrainLayer = L.tileLayer(
         "https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
         { subdomains: ["mt0", "mt1", "mt2", "mt3"] }
     );
@@ -47,19 +59,22 @@ function initMap() {
     map = L.map("map", {
         center: [20.5937, 78.9629],
         zoom: 5,
-        layers: [street]
+        layers: [streetLayer]
     });
 
     L.control.layers({
-        "Street": street,
-        "Satellite": satellite,
-        "Terrain": terrain
+        Street: streetLayer,
+        Satellite: satelliteLayer,
+        Terrain: terrainLayer
     }).addTo(map);
 
     map.on("click", onMapClick);
 }
 
-// ---------- MOVE MAP ----------
+ 
+// MAP MOVE & CLICK
+ 
+
 function moveMap(lat, lon) {
     toggleMap(true);
     map.setView([lat, lon], 10);
@@ -68,15 +83,16 @@ function moveMap(lat, lon) {
     marker = L.marker([lat, lon]).addTo(map);
 }
 
-// ---------- MAP CLICK ----------
-function onMapClick(e) {
-    const { lat, lng } = e.latlng;
+function onMapClick(event) {
+    const { lat, lng } = event.latlng;
     moveMap(lat, lng);
     fetchWeatherByCoordinates(lat, lng);
 }
-// Pincode-based search using OpenStreetMap Nominatim API
 
-// ---------- MAIN SEARCH (CITY / PINCODE) ----------
+ 
+// SEARCH BY CITY / PINCODE
+ 
+
 function getWeatherByCity() {
     clearError();
     const input = document.getElementById("cityInput").value.trim();
@@ -86,7 +102,7 @@ function getWeatherByCity() {
         return;
     }
 
-    // PINCODE DETECTION (India – 6 digits)
+    // Indian pincode detection
     if (/^\d{6}$/.test(input)) {
         fetchByPincode(input);
     } else {
@@ -94,9 +110,14 @@ function getWeatherByCity() {
     }
 }
 
-// ---------- CITY NAME SEARCH ----------
+ 
+// FETCH BY CITY NAME
+ 
+
 function fetchByCityName(place) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${API_KEY}&units=metric`)
+    fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${API_KEY}&units=metric`
+    )
         .then(res => res.json())
         .then(data => {
             if (!data.main) {
@@ -112,9 +133,14 @@ function fetchByCityName(place) {
         });
 }
 
-// ---------- PINCODE SEARCH ----------
+ 
+// FETCH BY PINCODE (NOMINATIM)
+ 
+
 function fetchByPincode(pincode) {
-    fetch(`https://nominatim.openstreetmap.org/search?postalcode=${pincode}&country=India&format=json`)
+    fetch(
+        `https://nominatim.openstreetmap.org/search?postalcode=${pincode}&country=India&format=json`
+    )
         .then(res => res.json())
         .then(data => {
             if (!data.length) {
@@ -122,47 +148,66 @@ function fetchByPincode(pincode) {
                 return;
             }
 
-            const lat = data[0].lat;
-            const lon = data[0].lon;
-
+            const { lat, lon } = data[0];
             moveMap(lat, lon);
             fetchWeatherByCoordinates(lat, lon);
         });
 }
 
-// ---------- CURRENT LOCATION ----------
+ 
+// FETCH BY CURRENT LOCATION
+ 
+
 function getWeatherByLocation() {
     clearError();
-    navigator.geolocation.getCurrentPosition(pos => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        moveMap(lat, lon);
-        fetchWeatherByCoordinates(lat, lon);
-    }, () => showError("Location permission denied"));
+
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            moveMap(lat, lon);
+            fetchWeatherByCoordinates(lat, lon);
+        },
+        () => showError("Location permission denied")
+    );
 }
 
-// ---------- WEATHER BY COORD ----------
+ 
+// FETCH WEATHER BY COORDINATES
+ 
+
 function fetchWeatherByCoordinates(lat, lon) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`)
+    fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    )
         .then(res => res.json())
         .then(data => {
             if (!data.main) {
-                showError("Weather unavailable");
+                showError("Weather data unavailable");
                 return;
             }
+
             displayWeather(data);
             fetchLocationDetails(lat, lon);
             fetchForecast(lat, lon);
         });
 }
 
-// ---------- LOCATION DETAILS (VILLAGE → COUNTRY) ----------
+ 
+// LOCATION DETAILS (REVERSE GEOCODING)
+ 
+
 function fetchLocationDetails(lat, lon) {
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+    fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+    )
         .then(res => res.json())
         .then(data => {
             const a = data.address || {};
-            const village = a.village || a.hamlet || a.town || a.city || "";
+
+            const village =
+                a.village || a.hamlet || a.town || a.city || "";
             const mandal = a.county || a.subdistrict || "";
             const district = a.state_district || "";
             const state = a.state || "";
@@ -173,7 +218,10 @@ function fetchLocationDetails(lat, lon) {
         });
 }
 
-// ---------- DISPLAY WEATHER ----------
+ 
+// DISPLAY CURRENT WEATHER
+ 
+
 function displayWeather(data) {
     document.getElementById("weatherBox").classList.remove("hidden");
 
@@ -181,49 +229,83 @@ function displayWeather(data) {
     isCelsius = true;
 
     document.getElementById("temperature").innerText =
-        `Temperature ${currentTempC} °C`;
+        `🌡 Temperature: ${currentTempC} °C`;
 
     document.getElementById("humidity").innerText =
-        `Humidity ${data.main.humidity}%`;
+        `💧 Humidity: ${data.main.humidity}%`;
 
     document.getElementById("wind").innerText =
-        `Wind ${data.wind.speed} m/s`;
+        `💨 Wind: ${data.wind.speed} m/s`;
 
     if (currentTempC > 40) {
         showError("⚠ Extreme heat alert!");
     }
 }
 
-// ---------- TEMP TOGGLE ----------
+ 
+// TEMPERATURE TOGGLE
+ 
+
 function toggleTemp() {
-    const tempEl = document.getElementById("temperature");
-    tempEl.innerText = isCelsius
-        ? `🌡 ${((currentTempC * 9 / 5) + 32).toFixed(1)} °F`
-        : `🌡 ${currentTempC} °C`;
+    const tempElement = document.getElementById("temperature");
+
+    if (isCelsius) {
+        tempElement.innerText =
+            `🌡 Temperature: ${((currentTempC * 9) / 5 + 32).toFixed(1)} °F`;
+    } else {
+        tempElement.innerText =
+            `🌡 Temperature: ${currentTempC} °C`;
+    }
+
     isCelsius = !isCelsius;
 }
 
-// ---------- FORECAST ----------
+ 
+// FORECAST COLOR LOGIC
+ 
+
+function getForecastClass(temp, description) {
+    description = description.toLowerCase();
+
+    if (description.includes("rain")) return "forecast-rain";
+    if (temp >= 32) return "forecast-hot";
+    if (temp >= 26) return "forecast-warm";
+    if (temp >= 18) return "forecast-normal";
+    return "forecast-cold";
+}
+
+// 5-DAY FORECAST
+ 
 function fetchForecast(lat, lon) {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`)
+    fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    )
         .then(res => res.json())
         .then(data => {
-            const forecast = document.getElementById("forecast");
-            forecast.innerHTML = "";
+            const forecastContainer = document.getElementById("forecast");
+            forecastContainer.innerHTML = "";
 
             data.list
                 .filter(item => item.dt_txt.includes("12:00:00"))
                 .slice(0, 5)
                 .forEach(day => {
+                    const temp = day.main.temp;
+                    const desc = day.weather[0].description;
+
                     const card = document.createElement("div");
-                    card.className = "bg-white rounded-xl shadow p-3 text-center";
+                    card.className = `forecast-card ${getForecastClass(temp, desc)}`;
+
                     card.innerHTML = `
-                        <p class="font-semibold">${day.dt_txt.split(" ")[0]}</p>
-                        <p>Temperature ${day.main.temp} °C</p>
-                        <p>Humidity ${day.main.humidity}%</p>
-                        <p>Wind ${day.wind.speed} m/s</p>
+                        <h4 class="font-bold text-lg mb-2">
+                            ${day.dt_txt.split(" ")[0]}
+                        </h4>
+                        <p>Temp ${temp} °C</p>
+                        <p>💧Humidity ${day.main.humidity}%</p>
+                        <p>💨Wind ${day.wind.speed} m/s</p>
+                        <p class="capitalize">${desc}</p>
                     `;
-                    forecast.appendChild(card);
+
+                    forecastContainer.appendChild(card);
                 });
         });
 }
