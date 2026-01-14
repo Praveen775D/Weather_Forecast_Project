@@ -1,45 +1,61 @@
 /* ============ FORECAST COLOR THEMES ============ */
+/* Forecast card background improved for better weather visualization */
+
+/* Common forecast card base */
+.forecast-card {
+    border-radius: 20px;
+    padding: 18px 14px;
+    text-align: center;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    backdrop-filter: blur(6px);
+}
+
+/* Hover animation */
+.forecast-card:hover {
+    transform: translateY(-8px) scale(1.06);
+    box-shadow: 0 26px 48px rgba(0, 0, 0, 0.35);
+}
 
 /* Hot / Sunny */
 .forecast-hot {
-    background: linear-gradient(135deg, #f97316, #fb7185);
-    color: #fff;
+    background: linear-gradient(135deg, #fb923c, #f43f5e);
+    color: #ffffff;
 }
 
 /* Warm / Clear */
 .forecast-warm {
-    background: linear-gradient(135deg, #facc15, #f97316);
+    background: linear-gradient(135deg, #fde047, #fb923c);
     color: #1f2937;
 }
 
 /* Normal / Cloudy */
 .forecast-normal {
     background: linear-gradient(135deg, #60a5fa, #818cf8);
-    color: #fff;
+    color: #ffffff;
 }
 
 /* Rainy */
 .forecast-rain {
-    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-    color: #fff;
+    background: linear-gradient(135deg, #38bdf8, #0284c7);
+    color: #ffffff;
 }
 
 /* Cold */
 .forecast-cold {
-    background: linear-gradient(135deg, #67e8f9, #3b82f6);
-    color: #fff;
+    background: linear-gradient(135deg, #67e8f9, #2563eb);
+    color: #ffffff;
 }
 
-/* Hover effect */
-.forecast-card {
-    border-radius: 18px;
-    padding: 16px;
-    text-align: center;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Text refinement */
+.forecast-card h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.forecast-card:hover {
-    transform: translateY(-8px) scale(1.05);
-    box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+.forecast-card p {
+    font-size: 0.95rem;
+    margin: 4px 0;
+    opacity: 0.95;
 }
