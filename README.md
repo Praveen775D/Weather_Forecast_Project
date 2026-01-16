@@ -27,12 +27,19 @@ It fetches real-time weather data using the OpenWeatherMap API.
 - OpenWeatherMap API
 - Leaflet.js (Map integration)
 
+## Setup Instructions
+1. Download or clone this repository
+2. Open `src/js/app.js`
+3. Replace `YOUR_API_KEY_HERE` with your OpenWeatherMap API key
+4. Open `index.html` in a browser
 
 ## How to Run the Project
 1. Clone or download the repository
 2. Open `index.html` in any modern browser
 3. Add your OpenWeatherMap API key inside `app.js`
-4. Search for a location or use the map
+4. Search for a location or use the map (or)
+5. Enter a city, pincode, or village name
+6. View real-time weather updates
 
 
 
@@ -47,11 +54,25 @@ https://openweathermap.org/api
 - Project follows Git version control best practices
 - Designed for educational and evaluation purposes
 
-## Setup Instructions
-1. Download or clone this repository
-2. Open `src/js/app.js`
-3. Replace `YOUR_API_KEY_HERE` with your OpenWeatherMap API key
-4. Open `index.html` in a browser
+## Git & Version Control
+
+### Git Features Used
+- Proper commit messages
+- `.gitignore` file to exclude:
+  - Node modules
+  - Editor configuration files
+  - Environment files
+
+## Future Enhancements
+- Weather alerts and notifications
+- Dark mode toggle
+- Hourly forecast display
+- User location auto-detection
+- Offline caching using Service Workers
+
+## Github link
+https://github.com/Praveen775D/Weather_Forecast_Project
 
 ## Author
 praveen
+
